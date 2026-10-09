@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HostelCare - Realtime Complaint Management</title>
+  <meta name="description" content="Professional hostel complaint registration and maintenance management module powered by InstantDB." />
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="/src/styles/variables.css" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <link rel="stylesheet" href="/src/styles/auth.css" />
+  <link rel="stylesheet" href="/src/styles/dashboard.css" />
+  <link rel="stylesheet" href="/src/styles/modal.css" />
+  <link rel="stylesheet" href="/src/styles/chat.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top Header Bar -->
+    <header class="main-header">
+      <div class="container header-container">
+        <!-- Logo -->
+        <a href="#" class="brand-logo">
+          <div class="logo-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/></svg>
+          </div>
+          <span class="brand-title">HostelCare</span>
+          <span class="brand-badge">System</span>
+        </a>
+
+        <!-- Right Side Header Controls -->
+        <div class="header-right">
+          <!-- InstantDB Status Indicator -->
+          <div class="db-sync-badge" id="dbSyncBadge" title="Real-time Synchronization Active">
+            <span class="db-sync-dot"></span>
+            <span id="dbSyncText">Live Sync</span>
+          </div>
+
+          <!-- Theme & Sound Toggles -->
+          <button class="icon-btn" id="btnToggleSound" title="Sound: ON" aria-label="Toggle Sound">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          </button>
+          <button class="icon-btn" id="btnToggleTheme" title="Toggle Theme" aria-label="Toggle Theme">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </button>
+
+          <!-- User Pill (When Logged In) -->
+          <div class="user-pill" id="headerUserPill" style="display: none;">
+            <div class="user-avatar-sm" id="headerUserAvatar">ST</div>
+            <div class="user-pill-info">
+              <span class="user-pill-name" id="headerUserName">Rahul Sharma</span>
+              <span class="user-pill-role" id="headerUserRole">Student • Block B 304</span>
+            </div>
+          </div>
+
+          <!-- Logout Button -->
+          <button class="btn btn-secondary btn-sm" id="btnLogout" style="display: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container" style="flex: 1; display: flex; flex-direction: column;">
+      
+      <!-- ================================================================= -->
+      <!-- SECTION 1: CENTERED AUTHENTICATION & LOGIN SCREEN                 -->
+      <!-- ================================================================= -->
+      <section id="authSection" class="auth-wrapper">
+        <div class="auth-container">
+          <div class="auth-header">
+            <div class="auth-badge">Hostel Operations Portal</div>
+            <h1 class="auth-title">Hostel Complaint System</h1>
+            <p class="auth-subtitle">Register maintenance tickets and track live updates</p>
+          </div>
+
+          <!-- Role Selector: Student vs Warden -->
+          <div class="role-tabs">
+            <button class="role-tab-btn active" id="roleTabStudent" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>Student Portal</span>
+            </button>
+            <button class="role-tab-btn" id="roleTabWarden" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span>Warden Portal</span>
+            </button>
+          </div>
+
+          <!-- STUDENT FORM CONTAINER -->
+          <div id="studentFormContainer">
+            <div class="sub-tabs">
+              <button class="sub-tab-btn active" id="subTabLogin" type="button">Sign In</button>
+              <button class="sub-tab-btn" id="subTabRegister" type="button">Register Student</button>
+            </div>
+
+            <!-- Student Login Form -->
+            <form id="studentLoginForm">
+              <div class="form-group">
+                <label class="form-label" for="studentLoginId">Student Roll No / ID <span class="required">*</span></label>
+                <div class="input-with-icon">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h6"/></svg>
+                  </span>
+                  <input type="text" id="studentLoginId" class="form-control" placeholder="e.g. 22BCE1045 or roll number" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="studentLoginPass">Password <span class="required">*</span></label>
+                <div class="input-with-icon">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                  <input type="password" id="studentLoginPass" class="form-control" placeholder="••••••••" required />
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem;">
+                Sign In as Student
+              </button>
+            </form>
+
+            <!-- Student Register Form -->
+            <form id="studentRegisterForm" style="display: none;">
+              <div class="form-group">
+                <label class="form-label" for="regStudentName">Full Name <span class="required">*</span></label>
+                <input type="text" id="regStudentName" class="form-control" placeholder="e.g. Rahul Sharma" required />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="regStudentId">Student Reg No <span class="required">*</span></label>
+                  <input type="text" id="regStudentId" class="form-control" placeholder="e.g. 22BCE1045" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="regStudentBlock">Hostel Block <span class="required">*</span></label>
+                  <select id="regStudentBlock" class="form-control">
+                    <option value="Block A">Block A (Nilgiri)</option>
+                    <option value="Block B" selected>Block B (Aravali)</option>
+                    <option value="Block C">Block C (Vindhya)</option>
+                    <option value="Block D">Block D (Shivalik)</option>
+                    <option value="Girls Hostel">Girls Hostel</option>
+                    <option value="Boys Hostel">Boys Hostel</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="regStudentRoom">Room Number <span class="required">*</span></label>
+                  <input type="text" id="regStudentRoom" class="form-control" placeholder="e.g. 304" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="regStudentPhone">Contact Phone</label>
+                  <input type="tel" id="regStudentPhone" class="form-control" placeholder="+91 98765 43210" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="regStudentEmail">Email Address</label>
+                <input type="email" id="regStudentEmail" class="form-control" placeholder="student@campus.edu" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="regStudentPass">Set Password <span class="required">*</span></label>
+                <input type="password" id="regStudentPass" class="form-control" placeholder="••••••••" required />
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem;">
+                Create Student Account
+              </button>
+            </form>
+          </div>
+
+          <!-- WARDEN FORM CONTAINER -->
+          <div id="wardenFormContainer" style="display: none;">
+            <div style="background: var(--bg-surface-hover); border: 1px solid var(--border-subtle); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); margin-bottom: 1rem; font-size: 0.8rem; color: var(--text-muted);">
+              Warden Administration Portal: Review hostel complaints and update ticket statuses in real time.
+            </div>
+
+            <form id="wardenLoginForm">
+              <div class="form-group">
+                <label class="form-label" for="wardenLoginId">Warden Staff ID / Email <span class="required">*</span></label>
+                <div class="input-with-icon">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                  </span>
+                  <input type="text" id="wardenLoginId" class="form-control" placeholder="e.g. WRD-CHIEF-01 or warden email" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="wardenLoginPass">Passcode / Password <span class="required">*</span></label>
+                <div class="input-with-icon">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                  <input type="password" id="wardenLoginPass" class="form-control" placeholder="••••••••" required />
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem;">
+                Sign In as Warden
+              </button>
+            </form>
+          </div>
+
+          <!-- ONE-CLICK QUICK DEMO LOGINS -->
+          <div class="demo-logins-panel">
+            <div class="demo-title">
+              <span>Quick Demo Personas</span>
+            </div>
+            <div class="demo-grid">
+              <button type="button" class="demo-user-card" data-persona="student_rahul">
+                <span class="demo-name">Rahul Sharma</span>
+                <span class="demo-role">Student (Room 304, Blk B)</span>
+              </button>
+
+              <button type="button" class="demo-user-card" data-persona="student_ananya">
+                <span class="demo-name">Ananya Iyer</span>
+                <span class="demo-role">Student (Room 112, Blk A)</span>
+              </button>
+
+              <button type="button" class="demo-user-card" data-persona="warden_chief">
+                <span class="demo-name">Dr. K. S. Verma</span>
+                <span class="demo-role">Chief Hostel Warden</span>
+              </button>
+
+              <button type="button" class="demo-user-card" data-persona="warden_block">
+                <span class="demo-name">Prof. Sunita Rao</span>
+                <span class="demo-role">Block B Warden</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SECTION 2: STUDENT DASHBOARD                                      -->
+      <!-- ================================================================= -->
+      <section id="studentSection" class="dashboard-wrapper" style="display: none;">
+        <div id="studentDashboardContent"></div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SECTION 3: WARDEN DASHBOARD                                       -->
+      <!-- ================================================================= -->
+      <section id="wardenSection" class="dashboard-wrapper" style="display: none;">
+        <div id="wardenDashboardContent"></div>
+      </section>
+
+    </main>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 1: RAISE COMPLAINT TICKET (With Guaranteed Sticky Footer)    -->
+    <!-- =================================================================== -->
+    <div class="modal-backdrop" id="raiseComplaintModal">
+      <div class="modal-dialog modal-dialog-lg">
+        <form id="raiseComplaintForm">
+          <div class="modal-header">
+            <h2 class="modal-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              <span>Raise Maintenance Complaint</span>
+            </h2>
+            <button type="button" class="modal-close-btn" aria-label="Close">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Category Selection Grid -->
+            <div class="form-group">
+              <label class="form-label">Issue Category <span class="required">*</span></label>
+              <div class="category-select-grid">
+                <button type="button" class="category-option-btn selected" data-category="Electrical">
+                  <span class="cat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+                  <span>Electrical</span>
+                </button>
+                <button type="button" class="category-option-btn" data-category="Plumbing">
+                  <span class="cat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg></span>
+                  <span>Plumbing</span>
+                </button>
+                <button type="button" class="category-option-btn" data-category="Carpentry">
+                  <span class="cat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9"/></svg></span>
+                  <span>Carpentry</span>
+                </button>
+                <button type="button" class="category-option-btn" data-category="Wi-Fi & Internet">
+                  <span class="cat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/></svg></span>
+                  <span>Wi-Fi / Net</span>
+                </button>
+                <button type="button" class="category-option-btn" data-category="Housekeeping">
+                  <span class="cat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 5-6 6"/><path d="m2 22 5-5"/></svg></span>
+                  <span>Cleaning</span>
+                </button>
+                <button type="button" class="category-option-btn" data-category="Mess & Food">
+                  <span class="cat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/></svg></span>
+                  <span>Mess & Food</span>
+                </button>
+                <button type="button" class="category-option-btn" data-category="Noise & Discipline">
+                  <span class="cat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg></span>
+                  <span>Noise</span>
+                </button>
+                <button type="button" class="category-option-btn" data-category="Other">
+                  <span class="cat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
+                  <span>Other</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Complaint Title -->
+            <div class="form-group">
+              <label class="form-label" for="newComplaintTitle">Complaint Summary / Title <span class="required">*</span></label>
+              <input type="text" id="newComplaintTitle" class="form-control" placeholder="e.g. Ceiling fan regulator sparking & vibrating" required />
+            </div>
+
+            <!-- Location Row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="newComplaintBlock">Hostel Block <span class="required">*</span></label>
+                <select id="newComplaintBlock" class="form-control">
+                  <option value="Block A">Block A (Nilgiri)</option>
+                  <option value="Block B" selected>Block B (Aravali)</option>
+                  <option value="Block C">Block C (Vindhya)</option>
+                  <option value="Block D">Block D (Shivalik)</option>
+                  <option value="Girls Hostel">Girls Hostel</option>
+                  <option value="Boys Hostel">Boys Hostel</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="newComplaintRoom">Room Number <span class="required">*</span></label>
+                <input type="text" id="newComplaintRoom" class="form-control" placeholder="e.g. 304" required />
+              </div>
+            </div>
+
+            <!-- Priority Selection -->
+            <div class="form-group">
+              <label class="form-label">Priority Level <span class="required">*</span></label>
+              <div class="priority-options-group">
+                <label class="priority-option-label p-low">
+                  <input type="radio" name="complaintPriority" value="low" />
+                  <span>Low</span>
+                </label>
+                <label class="priority-option-label p-medium">
+                  <input type="radio" name="complaintPriority" value="medium" checked />
+                  <span>Medium</span>
+                </label>
+                <label class="priority-option-label p-high">
+                  <input type="radio" name="complaintPriority" value="high" />
+                  <span>High</span>
+                </label>
+                <label class="priority-option-label p-urgent">
+                  <input type="radio" name="complaintPriority" value="urgent" />
+                  <span>Urgent</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+              <label class="form-label" for="newComplaintDesc">Detailed Description <span class="required">*</span></label>
+              <textarea id="newComplaintDesc" class="form-control" placeholder="Describe the issue in detail, when it began, and exact location..." required></textarea>
+            </div>
+
+            <!-- Preferred Time Slot -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="newComplaintTime">Preferred Inspection Timing</label>
+                <select id="newComplaintTime" class="form-control">
+                  <option value="Any Time">Any Time (As soon as available)</option>
+                  <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
+                  <option value="Afternoon (12 PM - 3 PM)">Afternoon (12 PM - 3 PM)</option>
+                  <option value="Evening (3 PM - 6 PM)">Evening (3 PM - 6 PM)</option>
+                </select>
+              </div>
+
+              <!-- Photo Upload -->
+              <div class="form-group">
+                <label class="form-label" for="newComplaintPhoto">Attach Photo Proof (Optional)</label>
+                <input type="file" id="newComplaintPhoto" class="form-control" accept="image/*" />
+                <div id="imagePreviewContainer"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sticky Modal Footer with Visible Submit Button -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-modal-close">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btnSubmitComplaint">
+              Submit Complaint Ticket
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 2: WARDEN UPDATE TICKET STATUS                               -->
+    <!-- =================================================================== -->
+    <div class="modal-backdrop" id="wardenUpdateStatusModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2 class="modal-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <span>Update Ticket Status</span>
+          </h2>
+          <button type="button" class="modal-close-btn" aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div style="background: var(--bg-surface-hover); border: 1px solid var(--border-subtle); padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.25rem;">
+              <span class="ticket-num-badge" id="editTicketNumberBadge">HST-0000</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);" id="editTicketStudent">Student Name</span>
+            </div>
+            <h3 style="font-size: 1rem;" id="editTicketTitle">Complaint Title</h3>
+          </div>
+
+          <!-- The 3 exact required status choices -->
+          <div class="form-group">
+            <label class="form-label">Lifecycle Status <span class="required">*</span></label>
+            <div class="warden-status-selector">
+              <label class="status-choice-card choice-addressed">
+                <input type="radio" name="wardenStatusRadio" id="statusRadioAddressed" value="Addressed" />
+                <span class="status-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                <span class="status-title">Addressed</span>
+                <span class="status-desc">Acknowledged & scheduled</span>
+              </label>
+
+              <label class="status-choice-card choice-inprogress">
+                <input type="radio" name="wardenStatusRadio" id="statusRadioInProgress" value="In progress" checked />
+                <span class="status-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                <span class="status-title">In Progress</span>
+                <span class="status-desc">Technician working on fix</span>
+              </label>
+
+              <label class="status-choice-card choice-rectified">
+                <input type="radio" name="wardenStatusRadio" id="statusRadioRectified" value="Rectified" />
+                <span class="status-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                <span class="status-title">Rectified</span>
+                <span class="status-desc">Issue resolved & verified</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Assigned Staff / Technician -->
+          <div class="form-group">
+            <label class="form-label" for="wardenAssignedStaffInput">Assigned Staff / Technician</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </span>
+              <input type="text" id="wardenAssignedStaffInput" class="form-control" placeholder="e.g. Ramesh (Electrician) / Suresh (Plumber)" />
+            </div>
+          </div>
+
+          <!-- Warden Remarks & Action Notes -->
+          <div class="form-group">
+            <label class="form-label" for="wardenRemarksInput">Warden Remarks / Resolution Feedback</label>
+            <textarea id="wardenRemarksInput" class="form-control" placeholder="e.g. Electrician scheduled for 3 PM inspection. Valve replaced."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-modal-close">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btnSaveWardenStatus">
+            Save & Sync Live
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 3: COMPLAINT DETAILS & STEPPER TIMELINE                      -->
+    <!-- =================================================================== -->
+    <div class="modal-backdrop" id="detailsTimelineModal">
+      <div class="modal-dialog modal-dialog-lg">
+        <div class="modal-header">
+          <h2 class="modal-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/></svg>
+            <span>Ticket Details & Resolution Timeline</span>
+          </h2>
+          <button type="button" class="modal-close-btn" aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+        <div class="modal-body" id="detailsTimelineBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-modal-close">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+  </div>
+
+  <script type="module" src="/src/js/app.js"></script>
+</body>
+</html>
