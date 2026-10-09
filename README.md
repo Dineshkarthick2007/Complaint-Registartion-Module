@@ -57,7 +57,7 @@ A professional, full-featured web application for hostel students and wardens to
 
 ## 👥 Project Contributors & Technical Roles
 
-### 👤 Contributor 1: Frontend & UI/UX Architect
+### 👤 Contributor 1: Frontend & UI/UX Architect (Karthieswaran E : Karthies0806)
 **Primary Responsibility**: UI Architecture, Design System, Authentication & Student Experience
 - **Key Contribution 1 (Design System & Dual-Role Auth)**: Architected the executive Black & White minimalist design system, custom SVG vector iconography (`icons.js`), and dual-role authentication portal with 1-click demo personas and session persistence.
 - **Key Contribution 2 (Complaint Registration & Form Validation)**: Developed the responsive complaint submission modal with category selectors, priority levels, inspection time slot picker, image preview/base64 converter, and client-side validation.
@@ -65,7 +65,7 @@ A professional, full-featured web application for hostel students and wardens to
 
 ---
 
-### 👤 Contributor 2: Real-time Backend & Cloud Database Engineer
+### 👤 Contributor 2: Real-time Backend & Cloud Database Engineer (Dinesh Karthick M : DineshKarthick122007)
 **Primary Responsibility**: InstantDB Database Architecture, Real-Time Sync & Warden Operations
 - **Key Contribution 1 (InstantDB Real-time Engine)**: Integrated InstantDB (`@instantdb/core`) using reactive query subscriptions (`subscribeQuery`) and transactional mutations to deliver sub-second data synchronization between warden actions and student dashboards.
 - **Key Contribution 2 (Warden Oversight & 3-State Lifecycle Management)**: Built the administrative management system with 3-state ticket workflow transitions (**Addressed**, **In Progress**, **Rectified**), staff assignment, warden remarks logging, and table/grid view toggles.
@@ -73,7 +73,7 @@ A professional, full-featured web application for hostel students and wardens to
 
 ---
 
-### 👤 Contributor 3: AI Systems & DevOps / Pipeline Engineer
+### 👤 Contributor 3: AI Systems & DevOps / Pipeline Engineer (Dinesh Karthik MV : gowkarthik2007-cpu)
 **Primary Responsibility**: AI Assistant Integration, Audio Synthesis & CI/CD Automation
 - **Key Contribution 1 (AI Assistant & n8n Webhook Integration)**: Integrated the floating AI chatbot widget connected to the n8n webhook (`hostel-complaint-bot`), supporting contextual user payload delivery, response parsing, and local FAQ fallback resilience.
 - **Key Contribution 2 (Web Audio Synthesizer & Toast Alert System)**: Developed a native Web Audio API sound synthesizer (`sound.js`) and toast notification system (`toast.js`) providing non-intrusive audio-visual cues for real-time status updates without external media assets.
